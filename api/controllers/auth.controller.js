@@ -23,7 +23,7 @@ export const register= async (req,res,next) =>
          const { password, ...info } = newUser._doc;
    
          // Set the token in a cookie
-         res.cookie("accessToken", token, { httpOnly: true, secure: true });
+         res.cookie("accessToken", token, { httpOnly: true });
    
          // Send response with user info and token
          res.status(201).send({ message: "User has been successfully created", user: info, token });
@@ -49,7 +49,7 @@ export const login= async (req,res,next) =>
       }, process.env.JWT_KEY);
 
       const { password, ...info } = user._doc;
-       res.cookie("accessToken", token, { httpOnly: true, secure: true });
+    res.cookie("accessToken", token, {httpOnly: true,}).status(200).send(info);
    }
    catch(err){
       next(err);
@@ -75,7 +75,7 @@ export const forgotpassword = async (req, res, next) => {
    await user.save({ validateBeforeSave: false });
 
    // 3. Send the token to email
-   const frontendUrl = "http://localhost:5173"; // Replace with your frontend URL
+   const frontendUrl = "https://outsource.netlify.app"; // Replace with your frontend URL
    const resetUrl = `${frontendUrl}/resetpassword/${resetToken}`;
    const message = `We have received a password reset request. Please use the below link to reset your password:\n\n${resetUrl}\n\nThis reset password link will be valid only for 10 minutes.`;
 
